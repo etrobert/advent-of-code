@@ -24,8 +24,27 @@ fn round_score(round: &str) -> i32 {
     }
 }
 
+fn round_score_2(round: &str) -> i32 {
+    let v: Vec<&str> = round.split(' ').collect();
+    match v[..] {
+        ["A", "X"] => LOOSE + SCISSORS,
+        ["A", "Y"] => DRAW + ROCK,
+        ["A", "Z"] => WIN + PAPER,
+        ["B", "X"] => LOOSE + ROCK,
+        ["B", "Y"] => DRAW + PAPER,
+        ["B", "Z"] => WIN + SCISSORS,
+        ["C", "X"] => LOOSE + PAPER,
+        ["C", "Y"] => DRAW + SCISSORS,
+        ["C", "Z"] => WIN + ROCK,
+        _ => panic!("Invalid round"),
+    }
+}
+
 fn main() {
     let file_text = fs::read_to_string("input").expect("Unable to read file");
-    let score: i32 = file_text.lines().map(round_score).sum();
-    println!("{}", score)
+    let rounds: Vec<&str> = file_text.lines().collect();
+    let score_1: i32 = rounds.iter().map(|round| round_score(round)).sum();
+    let score_2: i32 = rounds.iter().map(|round| round_score_2(round)).sum();
+    println!("Score 1: {}", score_1);
+    println!("Score 2: {}", score_2);
 }
